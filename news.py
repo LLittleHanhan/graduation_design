@@ -62,17 +62,15 @@ class news_spider:
     def _cre_table(self):
         db = self._connect()
         cursor = db.cursor()
-        sql = 'create table if not exists news(platform int not null,title text not null,date date not null,url char(255) primary key,text text)'
+        sql = 'create table if not exists news(platform int not null,title text not null,date date not null,url char(255) primary key,text mediumtext)'
         cursor.execute(sql)
         db.close()
 
     def _dis_info(self):
         db = self._connect()
         cursor = db.cursor()
-        cursor.execute('show tables')
-        print(cursor.fetchall())
         cursor.execute('select count(*) from news')
-        print('本地url数量:', cursor.fetchone()[0])
+        print('database现有url数量:', cursor.fetchone()[0])
         db.close()
 
     def _sum_url(self):
@@ -98,10 +96,10 @@ class news_spider:
         db.commit()
         db.close()
         after = self._sum_url()
-        print('增加url数量:', after - before)
+        print('净增加url数量:', after - before)
 
     # 央视更新最新url
-    def update_yangshi_news_url(self):
+    def _update_yangshi_news_url(self):
         # url提取
         news_list = []
         cls = ['china', 'world', 'society', 'law', 'ent', 'tech', 'life']
@@ -123,18 +121,12 @@ class news_spider:
                                'url': news['url']}
                         news_list.append(dic)
                 page += 1
-        print('获取央视网url数量', len(news_list))
+        print('更新央视网url数量', len(news_list))
         self._insert_news_url(news_list, 0)
 
     # 新浪网指定日期url;begin,end默认为时间戳格式
-    def update_xinlang_news_url(self, begin, end, is_stamp=False):
+    def _update_xinlang_news_url(self, begin_stamp, end_stamp):
         news_list = []
-        if is_stamp:
-            begin_stamp = begin
-            end_stamp = end
-        else:
-            begin_stamp = int(time.mktime(time.strptime(begin, "%Y-%m-%d")))
-            end_stamp = int(time.mktime(time.strptime(end, "%Y-%m-%d")))
         # 长时间段分天抓取
         while begin_stamp != end_stamp:
             page = 1
@@ -157,52 +149,57 @@ class news_spider:
                         news_list.append(dic)
                 page += 1
             begin_stamp += 86400
-        print('获取新浪网url数量:', len(news_list))
+        print('更新新浪网url数量:', len(news_list))
         self._insert_news_url(news_list, 1)
 
-    def update_url(self):
-        pass
-
-    def get_news(self):
-        news_list = []
+    def get_news(self, begin=None, end=None):
+        # 更新url
         today = '{year}-{month}-{day}'.format(year=datetime.datetime.now().year, month=datetime.datetime.now().month,
                                               day=datetime.datetime.now().day)
         today_stamp = int(time.mktime(time.strptime(today, "%Y-%m-%d")))
-        self.update_yangshi_news_url()
-        self.update_xinlang_news_url(today_stamp, today_stamp + 86400, is_stamp=True)
 
+        if begin is None:
+            begin_stamp = today_stamp
+            end_stamp = today_stamp + 86400
+        else:
+            begin_stamp = int(time.mktime(time.strptime(begin, "%Y-%m-%d")))
+            end_stamp = int(time.mktime(time.strptime(end, "%Y-%m-%d")))
+        # 央视新闻策略
+        if today_stamp - end_stamp <= 7 * 24 * 60 * 60:
+            print('yes')
+            self._update_yangshi_news_url()
+        self._update_xinlang_news_url(begin_stamp, end_stamp)
+
+        news_list = []
         db = self._connect()
         cursor = db.cursor(DictCursor)
-        sql = 'select * from news where date = "{today}"'.format(today=today)
-        cursor.execute(sql)
-        data = cursor.fetchall()
-
-        print('today is ' + today)
-        print('获取最新url数量', len(data))
-
-        for news in data:
-            if news['text'] is None:
-                text = ''
-                match news['platform']:
-                    case 0:
+        while begin_stamp < end_stamp:
+            date = time.strftime("%Y-%m-%d", time.localtime(begin_stamp))
+            sql = 'select * from news where date = "{date}"'.format(date=date)
+            cursor.execute(sql)
+            data = cursor.fetchall()
+            print('date is ' + date + ' 准备解析text，获取当日url数量:', len(data))
+            for news in data:
+                if news['text'] is None:
+                    text = ''
+                    if news['platform'] == 0:
                         text = self._analyse_yangshi_url(news['url'])
-                    case 1:
+                    elif news['platform'] == 1:
                         text = self._analyse_xinlang_url(news['url'])
-                if text == '':
-                    continue
-                news['text'] = text
-                sql = 'update news set text = "{text}" where url = "{url}"'.format(text=escape_string(text),
-                                                                                   url=news['url'])
-                cursor.execute(sql)
-            news_list.append(news)
+                    # match news['platform']:
+                    #     case 0:
+                    #         text = self._analyse_yangshi_url(news['url'])
+                    #     case 1:
+                    #         text = self._analyse_xinlang_url(news['url'])
+                    if text == '' or len(text) < 15:
+                        continue
+                    news['text'] = text
+                    sql = 'update news set text = "{text}" where url = "{url}"'.format(text=escape_string(text),
+                                                                                       url=news['url'])
+                    cursor.execute(sql)
+                news_list.append(news)
+            begin_stamp += 86400
         db.commit()
-
-        # 显示结果
-        sql = 'select * from news where date = "{today}" and text is not null'.format(today=today)
-        cursor.execute(sql)
-        for data in cursor.fetchall():
-            print(data)
-
         db.close()
         print('成功解析数量', len(news_list))
         return news_list
@@ -219,17 +216,14 @@ class news_spider:
 
     def _analyse_xinlang_url(self, url):
         text = ''
+        html = requests.get(url, self._headers).content
+        parent = bs(html, 'lxml').find(class_='article')
+        if parent is not None:
+            for child in parent.findAll(name='p'):
+                for string in child.stripped_strings:
+                    text += string
         return text
 
 
-spider = news_spider(reset=False)
-spider.get_news()
-# spider.update_xinlang_news_url('2022-8-5', '2022-8-9')
-
-# url = 'https://finance.sina.com.cn/china/gncj/2022-05-03/doc-imcwipii7755771.shtml'
-# page = requests.get(url,headers).content.decode('utf8')
-# html=bs(page, "lxml")
-# print(html.find(class_ = 'main-title').string)
-# father = html.find(class_ = 'article')
-# for child in father.findAll(name = 'p'):
-#     print(child.string)
+spider = news_spider(reset=True)
+spider.get_news('2023-4-29', '2023-4-30')
