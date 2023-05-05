@@ -226,4 +226,3 @@ class news_spider:
 
 
 spider = news_spider(reset=True)
-spider.get_news('2023-4-29', '2023-4-30')
