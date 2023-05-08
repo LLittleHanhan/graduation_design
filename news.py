@@ -166,7 +166,7 @@ class news_spider:
             end_stamp = int(time.mktime(time.strptime(end, "%Y-%m-%d")))
         # 央视新闻策略
         if today_stamp - end_stamp <= 7 * 24 * 60 * 60:
-            print('yes')
+            print('需要更新央视！')
             self._update_yangshi_news_url()
         self._update_xinlang_news_url(begin_stamp, end_stamp)
 
@@ -225,4 +225,3 @@ class news_spider:
         return text
 
 
-spider = news_spider(reset=True)
