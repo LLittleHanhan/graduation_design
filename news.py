@@ -45,7 +45,7 @@ class news_spider:
         try:
             db = pymysql.connect(host=self._host, port=self._port, user=self._user, password=self._password,
                                  db=self._db,
-                                 charset='utf8')
+                                 charset='utf8mb4')
         except pymysql.Error:
             print('connect fail')
             raise
@@ -223,5 +223,3 @@ class news_spider:
                 for string in child.stripped_strings:
                     text += string
         return text
-
-
