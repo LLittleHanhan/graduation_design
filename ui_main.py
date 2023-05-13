@@ -684,6 +684,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(10)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(10, 10, 10, 10)
+        self.cloud = QLabel(self.page_cloud)
+        self.cloud.setObjectName(u"cloud")
+
+        self.verticalLayout.addWidget(self.cloud)
+
         self.stackedWidget.addWidget(self.page_cloud)
         self.page_text = QWidget()
         self.page_text.setObjectName(u"page_text")
@@ -888,7 +893,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -916,6 +921,7 @@ class Ui_MainWindow(object):
         self.closeAppBtn.setToolTip(QCoreApplication.translate("MainWindow", u"Close", None))
 #endif // QT_CONFIG(tooltip)
         self.closeAppBtn.setText("")
+        self.cloud.setText("")
         self.btn_return.setText(QCoreApplication.translate("MainWindow", u"\u8fd4\u56de", None))
         self.cb_stocks.setText(QCoreApplication.translate("MainWindow", u"stocks", None))
         self.cb_all.setText(QCoreApplication.translate("MainWindow", u"all", None))

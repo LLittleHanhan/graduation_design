@@ -2,6 +2,7 @@ import os
 import datetime
 import time
 
+from PySide6 import QtGui
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QEvent, QTimer, Signal, QObject, QThread
 from PySide6.QtGui import QIcon, QColor
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QGraphicsDropShadowEffect, QSizeGrip, QHeaderView, \
@@ -64,6 +65,9 @@ class APP(QMainWindow, Ui_MainWindow):
         self.btn_event.clicked.connect(self.buttonClick)
 
         self.show()
+
+        # cloud
+        self.cloud.setScaledContents(True)
 
     # menu button
     def toggleMenu(self):
@@ -172,6 +176,9 @@ class APP(QMainWindow, Ui_MainWindow):
             self.news_table.setItem(row, 2, QTableWidgetItem(str(news['date'])))
             self.news_table.setItem(row, 3, QTableWidgetItem(str(news['platform'])))
             self.news_table.setItem(row, 4, QTableWidgetItem('class'))
+
+        self.pix = QtGui.QPixmap('cloud.png')
+        self.cloud.setPixmap(self.pix)
 
     def show_text(self):
         row = self.news_table.selectedItems()[0].row()
