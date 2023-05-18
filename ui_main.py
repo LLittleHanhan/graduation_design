@@ -731,10 +731,71 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.cb_stocks, 5, 3, 1, 1)
 
-        self.cb_all = QCheckBox(self.input)
-        self.cb_all.setObjectName(u"cb_all")
+        self.btn_end = QPushButton(self.input)
+        self.btn_end.setObjectName(u"btn_end")
 
-        self.gridLayout.addWidget(self.cb_all, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.btn_end, 2, 1, 1, 1)
+
+        self.btn_begin = QPushButton(self.input)
+        self.btn_begin.setObjectName(u"btn_begin")
+
+        self.gridLayout.addWidget(self.btn_begin, 1, 1, 1, 1)
+
+        self.cb_society = QCheckBox(self.input)
+        self.cb_society.setObjectName(u"cb_society")
+
+        self.gridLayout.addWidget(self.cb_society, 6, 1, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.gridLayout.addItem(self.verticalSpacer_2, 0, 1, 1, 1)
+
+        self.lb_begin = QLabel(self.input)
+        self.lb_begin.setObjectName(u"lb_begin")
+
+        self.gridLayout.addWidget(self.lb_begin, 1, 3, 1, 1)
+
+        self.btn_search = QPushButton(self.input)
+        self.btn_search.setObjectName(u"btn_search")
+
+        self.gridLayout.addWidget(self.btn_search, 10, 1, 1, 3)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.gridLayout.addItem(self.verticalSpacer_4, 9, 1, 1, 1)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout.addItem(self.verticalSpacer, 11, 1, 1, 1)
+
+        self.cb_entertainment = QCheckBox(self.input)
+        self.cb_entertainment.setObjectName(u"cb_entertainment")
+
+        self.gridLayout.addWidget(self.cb_entertainment, 8, 1, 1, 1)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.gridLayout.addItem(self.verticalSpacer_3, 3, 1, 1, 1)
+
+        self.lb_end = QLabel(self.input)
+        self.lb_end.setObjectName(u"lb_end")
+
+        self.gridLayout.addWidget(self.lb_end, 2, 3, 1, 1)
+
+        self.cb_education = QCheckBox(self.input)
+        self.cb_education.setObjectName(u"cb_education")
+
+        self.gridLayout.addWidget(self.cb_education, 8, 3, 1, 1)
+
+        self.cb_finance = QCheckBox(self.input)
+        self.cb_finance.setObjectName(u"cb_finance")
+
+        self.gridLayout.addWidget(self.cb_finance, 5, 1, 1, 1)
+
+        self.cb_science = QCheckBox(self.input)
+        self.cb_science.setObjectName(u"cb_science")
+
+        self.gridLayout.addWidget(self.cb_science, 4, 3, 1, 1)
 
         self.cb_sports = QCheckBox(self.input)
         self.cb_sports.setObjectName(u"cb_sports")
@@ -746,71 +807,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.cb_game, 7, 3, 1, 1)
 
-        self.lb_end = QLabel(self.input)
-        self.lb_end.setObjectName(u"lb_end")
+        self.cb_all = QCheckBox(self.input)
+        self.cb_all.setObjectName(u"cb_all")
 
-        self.gridLayout.addWidget(self.lb_end, 2, 3, 1, 1)
+        self.gridLayout.addWidget(self.cb_all, 4, 1, 1, 1)
 
         self.cb_pilitics = QCheckBox(self.input)
         self.cb_pilitics.setObjectName(u"cb_pilitics")
 
         self.gridLayout.addWidget(self.cb_pilitics, 6, 3, 1, 1)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer, 11, 1, 1, 1)
-
-        self.cb_finance = QCheckBox(self.input)
-        self.cb_finance.setObjectName(u"cb_finance")
-
-        self.gridLayout.addWidget(self.cb_finance, 5, 1, 1, 1)
-
-        self.btn_search = QPushButton(self.input)
-        self.btn_search.setObjectName(u"btn_search")
-
-        self.gridLayout.addWidget(self.btn_search, 10, 1, 1, 3)
-
-        self.btn_end = QPushButton(self.input)
-        self.btn_end.setObjectName(u"btn_end")
-
-        self.gridLayout.addWidget(self.btn_end, 2, 1, 1, 1)
-
-        self.cb_society = QCheckBox(self.input)
-        self.cb_society.setObjectName(u"cb_society")
-
-        self.gridLayout.addWidget(self.cb_society, 6, 1, 1, 1)
-
-        self.lb_begin = QLabel(self.input)
-        self.lb_begin.setObjectName(u"lb_begin")
-
-        self.gridLayout.addWidget(self.lb_begin, 1, 3, 1, 1)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Fixed)
-
-        self.gridLayout.addItem(self.verticalSpacer_2, 0, 1, 1, 1)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Fixed)
-
-        self.gridLayout.addItem(self.verticalSpacer_3, 3, 1, 1, 1)
-
-        self.btn_begin = QPushButton(self.input)
-        self.btn_begin.setObjectName(u"btn_begin")
-
-        self.gridLayout.addWidget(self.btn_begin, 1, 1, 1, 1)
-
-        self.cb_entertainment = QCheckBox(self.input)
-        self.cb_entertainment.setObjectName(u"cb_entertainment")
-
-        self.gridLayout.addWidget(self.cb_entertainment, 8, 1, 1, 1)
-
-        self.cb_education = QCheckBox(self.input)
-        self.cb_education.setObjectName(u"cb_education")
-
-        self.gridLayout.addWidget(self.cb_education, 8, 3, 1, 1)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
-
-        self.gridLayout.addItem(self.verticalSpacer_4, 9, 1, 1, 1)
 
 
         self.horizontalLayout_7.addWidget(self.input)
@@ -893,7 +898,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -924,19 +929,20 @@ class Ui_MainWindow(object):
         self.cloud.setText("")
         self.btn_return.setText(QCoreApplication.translate("MainWindow", u"\u8fd4\u56de", None))
         self.cb_stocks.setText(QCoreApplication.translate("MainWindow", u"stocks", None))
-        self.cb_all.setText(QCoreApplication.translate("MainWindow", u"all", None))
-        self.cb_sports.setText(QCoreApplication.translate("MainWindow", u"sports", None))
-        self.cb_game.setText(QCoreApplication.translate("MainWindow", u"game", None))
-        self.lb_end.setText(QCoreApplication.translate("MainWindow", u"tomorrow", None))
-        self.cb_pilitics.setText(QCoreApplication.translate("MainWindow", u"politics", None))
-        self.cb_finance.setText(QCoreApplication.translate("MainWindow", u"finance", None))
-        self.btn_search.setText(QCoreApplication.translate("MainWindow", u"search", None))
         self.btn_end.setText(QCoreApplication.translate("MainWindow", u"end date", None))
+        self.btn_begin.setText(QCoreApplication.translate("MainWindow", u"begin date", None))
         self.cb_society.setText(QCoreApplication.translate("MainWindow", u"society", None))
         self.lb_begin.setText(QCoreApplication.translate("MainWindow", u"today", None))
-        self.btn_begin.setText(QCoreApplication.translate("MainWindow", u"begin date", None))
+        self.btn_search.setText(QCoreApplication.translate("MainWindow", u"search", None))
         self.cb_entertainment.setText(QCoreApplication.translate("MainWindow", u"entertainment", None))
+        self.lb_end.setText(QCoreApplication.translate("MainWindow", u"tomorrow", None))
         self.cb_education.setText(QCoreApplication.translate("MainWindow", u"education", None))
+        self.cb_finance.setText(QCoreApplication.translate("MainWindow", u"finance", None))
+        self.cb_science.setText(QCoreApplication.translate("MainWindow", u"science", None))
+        self.cb_sports.setText(QCoreApplication.translate("MainWindow", u"sports", None))
+        self.cb_game.setText(QCoreApplication.translate("MainWindow", u"game", None))
+        self.cb_all.setText(QCoreApplication.translate("MainWindow", u"all", None))
+        self.cb_pilitics.setText(QCoreApplication.translate("MainWindow", u"politics", None))
         self.creditsLabel.setText(QCoreApplication.translate("MainWindow", u"By:FANFAN", None))
         self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
     # retranslateUi

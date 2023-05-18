@@ -1175,7 +1175,7 @@ background-position: center;
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>3</number>
                      </property>
                      <widget class="QWidget" name="home">
                       <property name="styleSheet">
@@ -1285,68 +1285,6 @@ background-repeat: no-repeat;</string>
                             </property>
                            </widget>
                           </item>
-                          <item row="4" column="1">
-                           <widget class="QCheckBox" name="cb_all">
-                            <property name="text">
-                             <string>all</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="7" column="1">
-                           <widget class="QCheckBox" name="cb_sports">
-                            <property name="text">
-                             <string>sports</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="7" column="3">
-                           <widget class="QCheckBox" name="cb_game">
-                            <property name="text">
-                             <string>game</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="2" column="3">
-                           <widget class="QLabel" name="lb_end">
-                            <property name="text">
-                             <string>tomorrow</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="6" column="3">
-                           <widget class="QCheckBox" name="cb_pilitics">
-                            <property name="text">
-                             <string>politics</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="11" column="1">
-                           <spacer name="verticalSpacer">
-                            <property name="orientation">
-                             <enum>Qt::Vertical</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>20</width>
-                              <height>40</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item row="5" column="1">
-                           <widget class="QCheckBox" name="cb_finance">
-                            <property name="text">
-                             <string>finance</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="10" column="1" colspan="3">
-                           <widget class="QPushButton" name="btn_search">
-                            <property name="text">
-                             <string>search</string>
-                            </property>
-                           </widget>
-                          </item>
                           <item row="2" column="1">
                            <widget class="QPushButton" name="btn_end">
                             <property name="text">
@@ -1354,17 +1292,17 @@ background-repeat: no-repeat;</string>
                             </property>
                            </widget>
                           </item>
+                          <item row="1" column="1">
+                           <widget class="QPushButton" name="btn_begin">
+                            <property name="text">
+                             <string>begin date</string>
+                            </property>
+                           </widget>
+                          </item>
                           <item row="6" column="1">
                            <widget class="QCheckBox" name="cb_society">
                             <property name="text">
                              <string>society</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="1" column="3">
-                           <widget class="QLabel" name="lb_begin">
-                            <property name="text">
-                             <string>today</string>
                             </property>
                            </widget>
                           </item>
@@ -1384,40 +1322,17 @@ background-repeat: no-repeat;</string>
                             </property>
                            </spacer>
                           </item>
-                          <item row="3" column="1">
-                           <spacer name="verticalSpacer_3">
-                            <property name="orientation">
-                             <enum>Qt::Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                             <enum>QSizePolicy::Fixed</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>20</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item row="1" column="1">
-                           <widget class="QPushButton" name="btn_begin">
+                          <item row="1" column="3">
+                           <widget class="QLabel" name="lb_begin">
                             <property name="text">
-                             <string>begin date</string>
+                             <string>today</string>
                             </property>
                            </widget>
                           </item>
-                          <item row="8" column="1">
-                           <widget class="QCheckBox" name="cb_entertainment">
+                          <item row="10" column="1" colspan="3">
+                           <widget class="QPushButton" name="btn_search">
                             <property name="text">
-                             <string>entertainment</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="8" column="3">
-                           <widget class="QCheckBox" name="cb_education">
-                            <property name="text">
-                             <string>education</string>
+                             <string>search</string>
                             </property>
                            </widget>
                           </item>
@@ -1436,6 +1351,98 @@ background-repeat: no-repeat;</string>
                              </size>
                             </property>
                            </spacer>
+                          </item>
+                          <item row="11" column="1">
+                           <spacer name="verticalSpacer">
+                            <property name="orientation">
+                             <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>20</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                          <item row="8" column="1">
+                           <widget class="QCheckBox" name="cb_entertainment">
+                            <property name="text">
+                             <string>entertainment</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="3" column="1">
+                           <spacer name="verticalSpacer_3">
+                            <property name="orientation">
+                             <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                             <enum>QSizePolicy::Fixed</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>20</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                          <item row="2" column="3">
+                           <widget class="QLabel" name="lb_end">
+                            <property name="text">
+                             <string>tomorrow</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="8" column="3">
+                           <widget class="QCheckBox" name="cb_education">
+                            <property name="text">
+                             <string>education</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="5" column="1">
+                           <widget class="QCheckBox" name="cb_finance">
+                            <property name="text">
+                             <string>finance</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="4" column="3">
+                           <widget class="QCheckBox" name="cb_science">
+                            <property name="text">
+                             <string>science</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="7" column="1">
+                           <widget class="QCheckBox" name="cb_sports">
+                            <property name="text">
+                             <string>sports</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="7" column="3">
+                           <widget class="QCheckBox" name="cb_game">
+                            <property name="text">
+                             <string>game</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="4" column="1">
+                           <widget class="QCheckBox" name="cb_all">
+                            <property name="text">
+                             <string>all</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="6" column="3">
+                           <widget class="QCheckBox" name="cb_pilitics">
+                            <property name="text">
+                             <string>politics</string>
+                            </property>
+                           </widget>
                           </item>
                          </layout>
                         </widget>

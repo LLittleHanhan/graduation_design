@@ -2,11 +2,16 @@ import json
 import time
 
 import requests
+import torch
 from bs4 import BeautifulSoup as bs
 import pymysql
 from pymysql.converters import escape_string
 from pymysql.cursors import DictCursor
 import datetime
+
+from model.class_model import class_model
+
+from transformers import AutoTokenizer, AutoConfig
 
 '''
 ('“五一”假期出行报告：机票、火车票、酒店数据加速回温',
@@ -33,6 +38,16 @@ class news_spider:
     _user = 'white'
     _password = 'Byf.473882'
     _db = 'news'
+    # model
+    tokenizer = AutoTokenizer.from_pretrained('./chinese-roberta-wwm-ext')
+    config = AutoConfig.from_pretrained('./chinese-roberta-wwm-ext')
+
+    class_list = ['finance', 'stocks', 'education', 'science', 'society', 'politics', 'sports', 'game', 'entertainment']
+    class_dic = {'finance': 0, 'stocks': 1, 'education': 2, 'science': 3, 'society': 4, 'politics': 5, 'sports': 6,
+                 'game': 7, 'entertainment': 8}
+    class_model = class_model(config)
+    class_model.load_state_dict(torch.load('./train_model/class.bin'))
+    class_count = 0
 
     def __init__(self, reset=False):
         self._cre_table()
@@ -62,7 +77,7 @@ class news_spider:
     def _cre_table(self):
         db = self._connect()
         cursor = db.cursor()
-        sql = 'create table if not exists news(platform int not null,title text not null,date date not null,url char(255) primary key,text mediumtext)'
+        sql = 'create table if not exists news(platform int not null,class int,title text not null,date date not null,url char(255) primary key,text mediumtext)'
         cursor.execute(sql)
         db.close()
 
@@ -152,8 +167,13 @@ class news_spider:
         print('更新新浪网url数量:', len(news_list))
         self._insert_news_url(news_list, 1)
 
-    def get_news(self, begin=None, end=None):
+    def get_news(self, begin=None, end=None, news_class=None):
         # 更新url
+        if news_class is None:
+            news_class = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        else:
+            news_class = [self.class_dic[cname] for cname in news_class]
+        print(news_class)
         today = '{year}-{month}-{day}'.format(year=datetime.datetime.now().year, month=datetime.datetime.now().month,
                                               day=datetime.datetime.now().day)
         today_stamp = int(time.mktime(time.strptime(today, "%Y-%m-%d")))
@@ -180,28 +200,32 @@ class news_spider:
             data = cursor.fetchall()
             print('date is ' + date + ' 准备解析text，获取当日url数量:', len(data))
             for news in data:
-                if news['text'] is None:
-                    text = ''
-                    if news['platform'] == 0:
-                        text = self._analyse_yangshi_url(news['url'])
-                    elif news['platform'] == 1:
-                        text = self._analyse_xinlang_url(news['url'])
-                    # match news['platform']:
-                    #     case 0:
-                    #         text = self._analyse_yangshi_url(news['url'])
-                    #     case 1:
-                    #         text = self._analyse_xinlang_url(news['url'])
-                    if text == '' or len(text) < 15:
-                        continue
-                    news['text'] = text
-                    sql = 'update news set text = "{text}" where url = "{url}"'.format(text=escape_string(text),
-                                                                                       url=news['url'])
+                # 这里判定类别
+                if news['class'] is None:
+                    news['class'] = self.get_news_class(news['title'])
+                    sql = 'update news set class = {news_class} where url = "{url}"'.format(news_class=news['class'],
+                                                                                            url=news['url'])
                     cursor.execute(sql)
-                news_list.append(news)
+                if news['class'] in news_class:
+                    if news['text'] is None:
+                        text = ''
+                        if news['platform'] == 0:
+                            text = self._analyse_yangshi_url(news['url'])
+                        elif news['platform'] == 1:
+                            text = self._analyse_xinlang_url(news['url'])
+                        if text == '' or len(text) < 15:
+                            continue
+                        news['text'] = text
+                        sql = 'update news set text = "{text}" where url = "{url}"'.format(text=escape_string(text),
+                                                                                           url=news['url'])
+                        cursor.execute(sql)
+                    news['class'] = self.class_list[news['class']]
+                    news_list.append(news)
             begin_stamp += 86400
         db.commit()
         db.close()
         print('成功解析数量', len(news_list))
+        print('class模型运行次数:', self.class_count)
         return news_list
 
     def _analyse_yangshi_url(self, url):
@@ -223,3 +247,11 @@ class news_spider:
                 for string in child.stripped_strings:
                     text += string
         return text
+
+    def get_news_class(self, title):
+        self.class_count += 1
+        self.class_model.eval()
+        with torch.no_grad():
+            inputs = self.tokenizer(title, truncation=True, return_tensors="pt", max_length=512)
+            idx = self.class_model(inputs)[0].argmax(dim=-1).cpu().numpy().tolist()[0]
+            return idx

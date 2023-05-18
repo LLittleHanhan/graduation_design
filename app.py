@@ -6,7 +6,7 @@ from PySide6 import QtGui
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QEvent, QTimer, Signal, QObject, QThread
 from PySide6.QtGui import QIcon, QColor
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QGraphicsDropShadowEffect, QSizeGrip, QHeaderView, \
-    QTableWidgetItem, QDialog, QAbstractItemView
+    QTableWidgetItem, QDialog, QAbstractItemView, QCheckBox
 
 from ui_main import Ui_MainWindow
 from ui_select_date import Ui_selec_date
@@ -48,7 +48,13 @@ class APP(QMainWindow, Ui_MainWindow):
         tomorrow = today + datetime.timedelta(days=1)
         self.lb_begin.setText(today.strftime('%Y-%m-%d'))
         self.lb_end.setText(tomorrow.strftime('%Y-%m-%d'))
-        self.cb_all.setChecked(True)
+
+        # cb
+        for cb in self.input.findChildren(QCheckBox):
+            cb.setChecked(True)
+            if cb.objectName() != 'cb_all':
+                cb.clicked.connect(self.cancel_all)
+        self.cb_all.clicked.connect(self.select_all)
 
         self.btn_begin.clicked.connect(self.select_date)
         self.btn_end.clicked.connect(self.select_date)
@@ -144,12 +150,18 @@ class APP(QMainWindow, Ui_MainWindow):
 
         begin = self.lb_begin.text()
         end = self.lb_end.text()
-
         begin_data = time.strptime(begin, "%Y-%m-%d")
         end_data = time.strptime(end, "%Y-%m-%d")
+
+        news_class = []
+        for cb in self.input.findChildren(QCheckBox):
+            if cb.isChecked():
+                news_class.append(str(cb.text()))
+        print(news_class)
+
         if begin_data < end_data:
             print('日期合法')
-            self.spider = spider(self.appData, begin, end)
+            self.spider = spider(self.appData, begin, end, news_class)
             self.thread = QThread()
             self.spider.moveToThread(self.thread)
 
@@ -175,7 +187,7 @@ class APP(QMainWindow, Ui_MainWindow):
             self.news_table.setItem(row, 1, QTableWidgetItem(str(news['title'])))
             self.news_table.setItem(row, 2, QTableWidgetItem(str(news['date'])))
             self.news_table.setItem(row, 3, QTableWidgetItem(str(news['platform'])))
-            self.news_table.setItem(row, 4, QTableWidgetItem('class'))
+            self.news_table.setItem(row, 4, QTableWidgetItem(str(news['class'])))
 
         self.pix = QtGui.QPixmap('cloud.png')
         self.cloud.setPixmap(self.pix)
@@ -190,6 +202,21 @@ class APP(QMainWindow, Ui_MainWindow):
 
     def return_news_table(self):
         self.stackedWidget.setCurrentWidget(self.page_get_news)
+
+    # cb
+    def select_all(self):
+        if self.cb_all.isChecked():
+            print('select all')
+            for cb in self.input.findChildren(QCheckBox):
+                if cb.objectName() != 'cb_all':
+                    cb.setChecked(True)
+        else:
+            for cb in self.input.findChildren(QCheckBox):
+                if cb.objectName() != 'cb_all':
+                    cb.setChecked(False)
+
+    def cancel_all(self):
+        self.cb_all.setChecked(False)
 
     # 隐藏丑丑的系统框，重写逻辑
     def maximize_restore(self):
@@ -258,15 +285,16 @@ class APP(QMainWindow, Ui_MainWindow):
 class spider(QObject):
     ready = Signal()
 
-    def __init__(self, appData, begin, end):
+    def __init__(self, appData, begin, end, news_class):
         super().__init__()
         self.appData = appData
         self.begin = begin
         self.end = end
+        self.news_class = news_class
 
     def get_news(self):
         print('spider线程开始')
-        self.appData.get_news(self.begin, self.end)
+        self.appData.get_news(self.begin, self.end, self.news_class)
         self.ready.emit()
 
 
