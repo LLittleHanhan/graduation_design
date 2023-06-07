@@ -15,18 +15,18 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
-    QHBoxLayout, QHeaderView, QLabel, QMainWindow,
-    QPushButton, QSizePolicy, QSpacerItem, QStackedWidget,
-    QTableWidget, QTableWidgetItem, QTextEdit, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
+    QMainWindow, QPushButton, QSizePolicy, QSpacerItem,
+    QStackedWidget, QTableWidget, QTableWidgetItem, QTextEdit,
+    QVBoxLayout, QWidget)
 import recources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1085, 632)
+        MainWindow.resize(1000, 618)
         MainWindow.setMinimumSize(QSize(1000, 618))
         self.styleSheet = QWidget(MainWindow)
         self.styleSheet.setObjectName(u"styleSheet")
@@ -373,6 +373,39 @@ class Ui_MainWindow(object):
 "	border: 2px solid rgb(43, 50, 61);\n"
 "}\n"
 "\n"
+"/* /////////////////////////////////////////////////////////////////////////////////////////////////\n"
+"ComboBox */\n"
+"QComboBox{\n"
+"	background-color: rgb(27, 29, 35);\n"
+"	border-radius: 5px;\n"
+"	border: 2px solid rgb(33, 37, 43);\n"
+"	padding: 5px;\n"
+"	padding-left: 10px;\n"
+"}\n"
+"QComboBox:hover{\n"
+"	border: 2px solid rgb(64, 71, 88);\n"
+"}\n"
+"QComboBox::drop-down {\n"
+"	subcontrol-origin: padding;\n"
+"	subcontrol-positio"
+                        "n: top right;\n"
+"	width: 25px; \n"
+"	border-left-width: 3px;\n"
+"	border-left-color: rgba(39, 44, 54, 150);\n"
+"	border-left-style: solid;\n"
+"	border-top-right-radius: 3px;\n"
+"	border-bottom-right-radius: 3px;	\n"
+"	background-image: url(:/icons/images/icons/cil-arrow-bottom.png);\n"
+"	background-position: center;\n"
+"	background-repeat: no-reperat;\n"
+" }\n"
+"QComboBox QAbstractItemView {\n"
+"	color: rgb(255, 121, 198);	\n"
+"	background-color: rgb(33, 37, 43);\n"
+"	padding: 10px;\n"
+"	selection-background-color: rgb(39, 44, 54);\n"
+"}\n"
+"\n"
 "")
         self.appMargins = QVBoxLayout(self.styleSheet)
         self.appMargins.setSpacing(0)
@@ -680,14 +713,28 @@ class Ui_MainWindow(object):
         self.page_cloud = QWidget()
         self.page_cloud.setObjectName(u"page_cloud")
         self.page_cloud.setStyleSheet(u"b")
-        self.verticalLayout = QVBoxLayout(self.page_cloud)
-        self.verticalLayout.setSpacing(10)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(10, 10, 10, 10)
+        self.gridLayout_2 = QGridLayout(self.page_cloud)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.cloud = QLabel(self.page_cloud)
         self.cloud.setObjectName(u"cloud")
 
-        self.verticalLayout.addWidget(self.cloud)
+        self.gridLayout_2.addWidget(self.cloud, 1, 1, 1, 1)
+
+        self.verticalSpacer_6 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.gridLayout_2.addItem(self.verticalSpacer_6, 0, 1, 1, 1)
+
+        self.verticalSpacer_7 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.gridLayout_2.addItem(self.verticalSpacer_7, 2, 1, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_2.addItem(self.horizontalSpacer, 1, 0, 1, 1)
+
+        self.horizontalSpacer_2 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_2.addItem(self.horizontalSpacer_2, 1, 2, 1, 1)
 
         self.stackedWidget.addWidget(self.page_cloud)
         self.page_text = QWidget()
@@ -828,12 +875,30 @@ class Ui_MainWindow(object):
         self.stackedWidget.addWidget(self.page_get_news)
         self.page_event = QWidget()
         self.page_event.setObjectName(u"page_event")
-        self.horizontalLayout_6 = QHBoxLayout(self.page_event)
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.tableWidget = QTableWidget(self.page_event)
-        self.tableWidget.setObjectName(u"tableWidget")
+        self.verticalLayout_7 = QVBoxLayout(self.page_event)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.verticalSpacer_9 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
-        self.horizontalLayout_6.addWidget(self.tableWidget)
+        self.verticalLayout_7.addItem(self.verticalSpacer_9)
+
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.comboBox = QComboBox(self.page_event)
+        self.comboBox.setObjectName(u"comboBox")
+
+        self.verticalLayout.addWidget(self.comboBox)
+
+        self.verticalSpacer_8 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.verticalLayout.addItem(self.verticalSpacer_8)
+
+        self.event_table = QTableWidget(self.page_event)
+        self.event_table.setObjectName(u"event_table")
+
+        self.verticalLayout.addWidget(self.event_table)
+
+
+        self.verticalLayout_7.addLayout(self.verticalLayout)
 
         self.stackedWidget.addWidget(self.page_event)
 
@@ -898,7 +963,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

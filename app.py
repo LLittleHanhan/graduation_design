@@ -42,7 +42,7 @@ class APP(QMainWindow, Ui_MainWindow):
         self.news_table.setHorizontalHeaderLabels(['index', 'title', 'date', 'platform', 'class'])
         self.news_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.news_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-        self.news_table.itemDoubleClicked.connect(self.show_text)
+        self.news_table.itemDoubleClicked.connect(lambda: self.show_text(flag=0))
 
         today = datetime.datetime.today()
         tomorrow = today + datetime.timedelta(days=1)
@@ -60,7 +60,6 @@ class APP(QMainWindow, Ui_MainWindow):
         self.btn_end.clicked.connect(self.select_date)
         self.btn_search.clicked.connect(self.get_news)
 
-        self.btn_return.clicked.connect(self.return_news_table)
         self.textEdit.setReadOnly(True)
 
         # menu
@@ -74,6 +73,13 @@ class APP(QMainWindow, Ui_MainWindow):
 
         # cloud
         self.cloud.setScaledContents(True)
+
+        # event
+        self.comboBox.activated.connect(self.show_event)
+        self.event_table.verticalHeader().setHidden(True)
+        self.event_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.event_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.event_table.itemDoubleClicked.connect(lambda: self.show_text(flag=1))
 
     # menu button
     def toggleMenu(self):
@@ -155,7 +161,7 @@ class APP(QMainWindow, Ui_MainWindow):
 
         news_class = []
         for cb in self.input.findChildren(QCheckBox):
-            if cb.isChecked():
+            if cb.isChecked() and cb.objectName() != 'cb_all':
                 news_class.append(str(cb.text()))
         print(news_class)
 
@@ -192,16 +198,44 @@ class APP(QMainWindow, Ui_MainWindow):
         self.pix = QtGui.QPixmap('cloud.png')
         self.cloud.setPixmap(self.pix)
 
-    def show_text(self):
-        row = self.news_table.selectedItems()[0].row()
+        event_list = self.appData.get_event_list()
+        self.comboBox.clear()
+        for event_type, events in event_list.items():
+            if len(events) != 0:
+                self.comboBox.addItem(event_type + '(' + str(len(events)) + ')')
+
+    def show_event(self):
+        event_type = self.comboBox.currentText().split('(')[0]
+        event_role = self.appData.role_dic[event_type]
+        self.event_table.setColumnCount(len(event_role))
+        self.event_table.setHorizontalHeaderLabels(event_role)
+
+        event_list = self.appData.get_event_list()[event_type]
+        print(event_list)
+        self.event_table.setRowCount(len(event_list))
+        for row, event in enumerate(event_list):
+            for col, role in enumerate(event[1:]):
+                self.event_table.setItem(row, col, QTableWidgetItem(event[col + 1]))
+
+    def show_text(self, flag):
+        self.btn_return.clicked.connect(lambda: self.return_news_table(flag))
+        if flag == 0:
+            row = self.news_table.selectedItems()[0].row()
+        if flag == 1:
+            event_type = self.comboBox.currentText().split('(')[0]
+            event_list = self.appData.get_event_list()[event_type]
+            row = event_list[self.event_table.selectedItems()[0].row()][0]
         title = self.appData.get_news_list()[row]['title']
         text = self.appData.get_news_list()[row]['text']
         html = '<!DOCTYPE html><html><body><h1 align="center">' + title + '</h1><p style="text-indent:28px">' + text + '</body></html>'
         self.textEdit.setHtml(html)
         self.stackedWidget.setCurrentWidget(self.page_text)
 
-    def return_news_table(self):
-        self.stackedWidget.setCurrentWidget(self.page_get_news)
+    def return_news_table(self, flag):
+        if flag == 0:
+            self.stackedWidget.setCurrentWidget(self.page_get_news)
+        if flag == 1:
+            self.stackedWidget.setCurrentWidget(self.page_event)
 
     # cb
     def select_all(self):
